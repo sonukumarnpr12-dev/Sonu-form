@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sonu PDF</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f0f0f0; /* keep page light so form stands out */
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      /* Gradient background inside the form */
+      background: linear-gradient(135deg, green, violet, purple);
+      padding: 20px;
+      border: 2px solid #333;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 8px;
+      color: #fff; /* make text readable on gradient */
+    }
+    .title-italian {
+      text-align: center;
+      font-family: 'Georgia','Times New Roman',serif;
+      font-size: 32px;
+      font-style: italic;
+      margin-bottom: 30px;
+      color: #fff;
+    }
+    .form-group {
+      margin-bottom: 20px;
+      border: 2px solid #fff;
+      padding: 12px;
+      background: rgba(255,255,255,0.2); /* semi-transparent box */
+      text-align: center;
+      border-radius: 6px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      text-align: center;
+      color: #fff;
+    }
+    .name-box {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      font-size: 16px;
+      text-align: center;
+      box-sizing: border-box;
+      background: rgba(255,255,255,0.8);
+      color: #000;
+    }
+    .name-box input {
+      flex: 1;
+      margin-bottom: 0;
+    }
+    input::placeholder {
+      color: #555;
+      font-style: italic;
+      opacity: 0.7;
+      text-align: center;
+    }
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      border: 2px solid #fff;
+      background: rgba(255,255,255,0.8);
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 5px;
+      color: #000;
+    }
+    button:hover {
+      background: rgba(255,255,255,1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title-italian">Sonu PDF</div>
+    <form id="sonuForm">
+      <div class="form-group">
+        <label>Name</label>
+        <div class="name-box">
+          <input type="text" id="firstName" name="firstName" placeholder="First name" required />
+          <input type="text" id="lastName" name="lastName" placeholder="Last name" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dob">D.O.B</label>
+        <input type="text" id="dob" name="dob" placeholder="DD/MM/YYYY" required />
+      </div>
+
+      <div class="form-group">
+        <label>Date</label>
+        <input type="text" id="today" name="today" readonly />
+      </div>
+
+      <div class="button-group">
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Auto-fill today's date
+    const todayField = document.getElementById("today");
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    todayField.value = `${dd}/${mm}/${yyyy}`;
+
+    // DOB: Auto-slash when pressing space or enter
+    const dobInput = document.getElementById("dob");
+    dobInput.addEventListener("keydown", function(e) {
+      if (e.key === " " || e.key === "Enter") {
+        e.preventDefault();
+        let val = dobInput.value.replace(/[^\d]/g, "");
+        if (val.length === 2) {
+          dobInput.value = val.slice(0,2) + "/";
+        } else if (val.length === 4) {
+          dobInput.value = val.slice(0,2) + "/" + val.slice(2,4) + "/";
+        } else if (val.length === 8) {
+          dobInput.value = val.slice(0,2) + "/" + val.slice(2,4) + "/" + val.slice(4,8);
+        }
+      }
+    });
+
+    // WhatsApp submission
+    document.getElementById("sonuForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const dob = document.getElementById("dob").value.trim();
+      const date = document.getElementById("today").value.trim();
+
+      // Your WhatsApp number (with country code, no + or spaces)
+      const phoneNumber = "917352613736"; // India country code +91
+
+      const message = `Form Submitted:\nName: ${firstName} ${lastName}\nD.O.B: ${dob}\nDate: ${date}`;
+      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+      // Open WhatsApp with message
+      window.open(url, "_blank");
+    });
+  </script>
+</body>
+</html>
